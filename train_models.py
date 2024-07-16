@@ -17,8 +17,10 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES'] = ''
 import numpy as onp
 import jax
-import jax.experimental.optimizers
+# import jax.experimental.optimizers REPLACED BY DANNY
+from jax.example_libraries import optimizers # ADDED BY DANNY
 import jax.numpy as jnp
+import pickle # ADDED BY DANNY
 
 def matmul(a,b,c,np=jnp):
     if c is None:
@@ -90,7 +92,7 @@ SAMPLES = 20
 # Again, let's not think. Just optimize with adam.
 # Your cosine cyclic learning rate schedule can have fun elsewhere.
 # We just pick 3e-4 because Karpathy said so.
-init, opt_update, get_params = jax.experimental.optimizers.adam(3e-4)
+init, opt_update, get_params = optimizers.adam(3e-4) # UPDATED BY DANNY
 
 X = onp.random.normal(size=(SAMPLES, sizes[0]))
 Y = onp.array(onp.random.normal(size=SAMPLES)>0,dtype=onp.float32)
@@ -126,4 +128,15 @@ for i in range(100):
         step += 1
         
 # Save our amazing model.
-onp.save("models/" + str(seed) + "_" + "-".join(map(str,sizes)), params)
+# onp.save("models/" + str(seed) + "_" + "-".join(map(str,sizes)), params) # REMOVED BY DANNY
+
+# BELOW CODE ADDED BY DANNY
+print("Dimensions of each layer: \n")
+
+for i, (a,b) in enumerate(zip(A, B)):
+    print(f"Layer {i}: Weights A[{i}] = {a.shape}, B[{i}] = {b.shape}\n")
+
+save_path_pkl = "models/" + str(seed) + "_" + "-".join(map(str, sizes)) + ".pkl"
+with open(save_path_pkl, 'wb') as f:
+    pickle.dump(params, f)
+print(f"Model saved to {save_path_pkl} using pickle")

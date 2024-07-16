@@ -15,7 +15,7 @@
 import numpy as np
 
 import jax
-import jax.experimental.optimizers
+from jax.example_libraries import optimizers # ADDED BY DANNY
 import jax.numpy as jnp
 
 from src.global_vars import *
@@ -113,7 +113,8 @@ def improve_row_precision(args):
                 # No queries involvd here.
                 if step%1000 == 0:
                     lr *= .5
-                    init, opt_update, get_params = jax.experimental.optimizers.adam(lr)
+                    # init, opt_update, get_params = jax.experimental.optimizers.adam(lr) # REMOVED BY DANNY
+                    init, opt_update, get_params = optimizers.adam(lr) # UPDATED BY DANNY
                 
                     @jax.jit
                     def update(i, opt_state, batch):

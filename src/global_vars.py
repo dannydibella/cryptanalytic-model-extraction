@@ -21,7 +21,7 @@ import random
 ## GLOBAL VARIABLES. I am a bad person and use globals. I'm sorry. ##
 #####################################################################
 
-from jax.config import config
+from jax import config
 config.update("jax_enable_x64", True)
 
 # To ensure reproducible results to help debugging, set seeds for randomness.
@@ -36,7 +36,7 @@ neuron_count = sizes
 
 DIM = sizes[0]
 
-__cheat_A, __cheat_B = np.load("models/" + str(seed) + "_" + "-".join(map(str,sizes))+".npy", allow_pickle=True)
+__cheat_A, __cheat_B = np.load("models/" + str(seed) + "_" + "-".join(map(str,sizes))+".pkl", allow_pickle=True)
 
 # In order to help debugging, we're going to log what lines of code
 # cause lots of queries to be generated. Use this to improve things.
